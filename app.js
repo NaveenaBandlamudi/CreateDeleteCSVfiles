@@ -42,7 +42,7 @@ app.post("/csv", async (req, res) => {
   var filename = file.filename;
 
   // --- Create a table based on the Filename + random number
-  await createTable(filename, csvData.headers);
+  await createTable(filename, csvData.headers, csvData.data);
 
   // insert csv data to table
   await insertCSVDataToTable(filename, csvData.headers, csvData.data);
@@ -64,8 +64,7 @@ const csvReader = async csvFile => {
     headers: null
   };
 
-  await fs
-    .createReadStream(filePath)
+  fs.createReadStream(filePath)
     .pipe(csv())
     .on("headers", headers => {
       // console.log(`First header: ${headers[0]}`)

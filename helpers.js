@@ -41,20 +41,44 @@ let deleteTable = async (conn, tableName) => {
   });
 };
 
-const getInsertSQL = (tableName, headers, rows) => {
-  let rowsArr = rows.map(row => {});
-  let sql = `INSERT INTO ${tableName} (${headers.join(",")}) values `;
+const insertRowSQL = (tableName, headers, rows) => {
+  const returnData = {
+    error: true,
+    message: "",
+    data: null
+  };
+  let rowsArr = rows.map(row => `${row}`);
+  let insertingRowSQL = `INSERT INTO ${tableName} (${headers.join(
+    ","
+  )}) values(${rowsArr.join(",")}) `;
+
+  if (!tableName || !headers || !rowsArr) {
+    return {
+      ...returnData,
+      message: "Tablename or table headers or Table Data not found/incorrect"
+    };
+  }
+
+  insertingRowSQL = `${insertingRowSQL})`;
+
+  returnData.data = insertingRowSQL;
+
+  return returnData;
 };
 
 // --- Loop through extracted rows
 // ----- Insert the row in the table which was created dynamically
 const insertCSVDataToTable = async (tableName, headers, csvData) => {
   //TODO
-  //   var sql = "INSERT INTO customers (name, address) VALUES ('Company Inc', 'Highway 37')";
+  conn.query(csvData, (err, result) => {
+    if (err) throw err;
+    console.log("Row Inserted");
+  });
 };
 
 module.exports = {
   createTableSQL,
   createTable,
-  deleteTable
+  deleteTable,
+  insertRowSQL
 };
