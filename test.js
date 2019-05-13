@@ -48,15 +48,14 @@ const testCreateTable = async conn => {
 };
 
 const testInsertRowSQL = () => {
-  console.log("within testInsertRowSQL");
   let sql = helpers.insertRowSQL(
     tableName,
     ["a", "b", "c", "d", "e", "f"],
     ["Naveena", "20", "asdfg", "asdfg", "sdfb", "sdfgb", "kjhgf"]
   );
 
-  console.log(sql);
-  // return sql;
+  console.log("=========>", sql);
+  return sql;
 };
 
 //testing inserting row
@@ -65,7 +64,8 @@ const testInsertRowTable = async conn => {
   console.log(sql);
 
   try {
-    helpers.insertCSVDataToTable(conn, row.data);
+    let conn = getConnection();
+    helpers.insertCSVDataToTable(conn, tableName, sql.data);
   } catch (error) {
     console.log("Error occured", error);
   }
@@ -76,7 +76,7 @@ const testOperations = () => {
   let conn = getConnection();
   helpers.deleteTable(conn, tableName);
   testCreateTable(conn);
-  testInsertRowSQL();
+  testInsertRowTable();
 };
 
 testOperations();

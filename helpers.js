@@ -51,6 +51,7 @@ const insertRowSQL = (tableName, headers, rows) => {
   let insertingRowSQL = `INSERT INTO ${tableName} (${headers.join(
     ","
   )}) values(${rowsArr.join(",")}) `;
+  console.log(insertingRowSQL);
 
   if (!tableName || !headers || !rowsArr) {
     return {
@@ -59,16 +60,16 @@ const insertRowSQL = (tableName, headers, rows) => {
     };
   }
 
-  insertingRowSQL = `${insertingRowSQL})`;
+  insertingRowSQL = `${insertingRowSQL} `;
 
   returnData.data = insertingRowSQL;
-
+  //console.log(returnData);
   return returnData;
 };
 
 // --- Loop through extracted rows
 // ----- Insert the row in the table which was created dynamically
-const insertCSVDataToTable = async (tableName, headers, csvData) => {
+const insertCSVDataToTable = async (conn, tableName, headers, csvData) => {
   //TODO
   conn.query(csvData, (err, result) => {
     if (err) throw err;
@@ -80,5 +81,6 @@ module.exports = {
   createTableSQL,
   createTable,
   deleteTable,
-  insertRowSQL
+  insertRowSQL,
+  insertCSVDataToTable
 };
